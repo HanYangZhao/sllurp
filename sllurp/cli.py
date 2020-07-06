@@ -21,7 +21,8 @@ logger = loggie.get_logger(__name__)
 @click.group()
 @click.option('-d', '--debug', is_flag=True, default=False)
 @click.option('-l', '--logfile', type=click.Path())
-def cli(debug, logfile):
+@click.option('-s', '--stream', type=click.Choice(['stdout', 'stderr']), default='stdout')
+def cli(debug, logfile, stream):
     loggie.init_logging(debug, logfile)
 
 

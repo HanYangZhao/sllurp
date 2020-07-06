@@ -4,7 +4,7 @@ Logging setup
 
 from __future__ import unicode_literals
 import logging
-
+import sys
 # Global
 general_debug_enabled = False
 
@@ -15,19 +15,23 @@ def set_general_debug(debug=False):
 def is_general_debug_enabled():
     return general_debug_enabled
 
-def init_logging(debug=False, logfile=None):
+def init_logging(debug=False, logfile=None, stream="stderr"):
     """Initialize logging."""
     set_general_debug(debug)
 
     loglevel = logging.DEBUG if debug else logging.INFO
     logformat = '%(asctime)s %(name)s: %(levelname)s: %(message)s'
     formatter = logging.Formatter(logformat)
-    stderr = logging.StreamHandler()
-    stderr.setFormatter(formatter)
 
+    if (stream == "stdout"):
+        stream = logging.StreamHandler(sys.stdout)
+    else:
+        stream = logging.StreamHandler(sys.stderr)
+
+    stream.setFormatter(formatter)
     root = logging.getLogger()
     root.setLevel(loglevel)
-    root.handlers = [stderr]
+    root.handlers = [stream]
 
     if logfile:
         fhandler = logging.FileHandler(logfile)
